@@ -69,46 +69,30 @@ map<string, int> frequencyMap(string& text) {
 
     while (ss >> word)
     {
-
+        while (!word.empty() && isalpha(word.back()))
+        {
+            word.pop_back();
+        }
+        frequencyMap[word]++;
     }
+
+    return frequencyMap;
 }
 
+
+
 int main() {
-    File inputFile("input.txt", std::ios::in);
-    File outputFile("output.txt", std::ios::out);
+    File inputFile("input.txt", ios::in);
+    File outputFile("output.txt", ios::out);
+    
+    string text = inputFile.read();
+    map<string, int> frmap = frequencyMap(text);
 
-    if (!inputFile.isOpen() || !outputFile.isOpen()) {
-        return 1;
+    cout << "Words:          quantity" << endl;
+    for (auto& pair : frmap)
+    {
+        cout << pair.first << "    -     " << pair.second << endl;
     }
-
-    // Читаємо вміст вхідного файлу
-    std::string text = inputFile.read();
-
-    // Формуємо частотний словник
-    std::map<std::string, int> frequencyMap = buildFrequencyMap(text);
-
-    // Виводимо інформацію про всі слова
-    for (const auto& pair : frequencyMap) {
-        std::cout << pair.first << ": " << pair.second << std::endl;
-    }
-
-    // Знаходимо найбільш часто вживане слово
-    std::string mostFrequentWord;
-    int maxFrequency = 0;
-    for (const auto& pair : frequencyMap) {
-        if (pair.second > maxFrequency) {
-            mostFrequentWord = pair.first;
-            maxFrequency = pair.second;
-        }
-    }
-
-    // Виводимо найбільш часто вживане слово
-    std::cout << "Most frequent word: " << mostFrequentWord << " (frequency: " << maxFrequency << ")" << std::endl;
-
-    // Записуємо результат у файл
-    for (const auto& pair : frequencyMap) {
-        outputFile.write(pair.first + ": " + std::to_string(pair.second) + "\n");
-    }
-
+    
     return 0;
 }

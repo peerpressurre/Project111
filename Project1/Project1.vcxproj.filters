@@ -3,4 +3,17 @@
   <ItemGroup>
     <ClCompile Include="FileName.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="files">
+      <UniqueIdentifier>{d3f821f4-8c83-4446-b1ef-b6c2b0bf210f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\..\Desktop\input.txt">
+      <Filter>files</Filter>
+    </Text>
+    <Text Include="..\..\..\..\Desktop\output.txt">
+      <Filter>files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
