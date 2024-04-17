@@ -3,17 +3,14 @@
 #include <map>
 #include <string>
 #include <sstream>
+#include <filesystem> 
 
-
-using namespace std;
-
-// Клас для роботи з файлами
-class File {
+class File{
 private:
     std::fstream file;
 
 public:
-    File(const string& filename, ios_base::openmode mode) {
+    File(const std::string& filename, std::ios_base::openmode mode) {
         file.open(filename, mode);
         if (!file.is_open()) {
             std::cerr << "Failed to open file: " << filename << std::endl;
@@ -30,69 +27,64 @@ public:
         return file.is_open();
     }
 
-    void write(const string& data) {
+    void write(const std::string& data) {
         file << data;
     }
 
-    string read() {
-        string content;
-        string line;
-        while (getline(file, line)) {
+    std::string read() {
+        std::string content;
+        std::string line;
+        while (std::getline(file, line)) {
             content += line + "\n";
         }
         return content;
     }
 };
 
-// Функція для формування частотного словника
-std::map<std::string, int> buildFrequencyMap(const std::string& text) {
+std::map<std::string, int> frequencyMap(std::string& text) {
     std::map<std::string, int> frequencyMap;
     std::string word;
-    std::istringstream iss(text);
+    std::istringstream ss(text);
 
-    while (iss >> word) {
-        // Видаляємо символи пунктуації з кінця слова
+    while(ss >> word) {
         while (!word.empty() && !std::isalpha(word.back())) {
             word.pop_back();
         }
-        // Збільшуємо лічильник для цього слова
-        frequencyMap[word]++;
-    }
-
-    return frequencyMap;
-}
-
-map<string, int> frequencyMap(string& text) {
-    map<string, int> frequencyMap;
-    string word;
-    istringstream ss(text);
-
-    while (ss >> word)
-    {
-        while (!word.empty() && isalpha(word.back()))
-        {
-            word.pop_back();
+        if (!word.empty()) {
+            frequencyMap[word]++;
         }
-        frequencyMap[word]++;
+        else {
+            std::cout << "Empty word encountered!" << std::endl;
+        }
     }
 
     return frequencyMap;
 }
-
 
 
 int main() {
-    File inputFile("input.txt", ios::in);
-    File outputFile("output.txt", ios::out);
-    
-    string text = inputFile.read();
-    map<string, int> frmap = frequencyMap(text);
+    File inputFile("input.txt", std::ios::in);
+    File outputFile("output.txt", std::ios::out);
 
-    cout << "Words:          quantity" << endl;
+    std::string text = inputFile.read();
+    //inputFile.close();
+
+    std::map<std::string, int> frmap = frequencyMap(text);
+    std::cout << "Words:       quantity" << std::endl;
     for (auto& pair : frmap)
     {
-        cout << pair.first << "    -     " << pair.second << endl;
+        std::cout << "Word: " << pair.first << "    " << "Count: " << pair.second << std::endl;
     }
-    
+    std::string maxstr;
+    int max = 0;
+    for (auto& pair : frmap)
+    {
+        if (pair.second > max)
+        {
+            max = pair.second;
+            maxstr = pair.first;
+        }
+    }
+    std::cout << "Most encountered word: " << maxstr << " - " << frmap[maxstr] << std::endl;
     return 0;
 }
