@@ -68,12 +68,12 @@ int main() {
 
     std::string text = inputFile.read();
     //inputFile.close();
-
+    std::string result;
     std::map<std::string, int> frmap = frequencyMap(text);
     std::cout << "Words:       quantity" << std::endl;
     for (auto& pair : frmap)
     {
-        std::cout << "Word: " << pair.first << "    " << "Count: " << pair.second << std::endl;
+        result += "Word: " + pair.first + "    " + "Count: " + std::to_string(pair.second) + "\n";
     }
     std::string maxstr;
     int max = 0;
@@ -85,6 +85,8 @@ int main() {
             maxstr = pair.first;
         }
     }
-    std::cout << "Most encountered word: " << maxstr << " - " << frmap[maxstr] << std::endl;
+    result += "Most encountered word: " + maxstr + " - " + std::to_string(frmap[maxstr]) + "\n";
+    std::cout << result << std::endl;
+    outputFile.write(result);
     return 0;
 }
